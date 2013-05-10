@@ -2,10 +2,11 @@
 ze = {};
 (function (ze) {
   // Objects
-
+  window.animId = null;
   ze.init = function (func) {
     var app = new ze.App();
-    func(ze);
+    func(app);
+    app.draw();
   }
 
 })(ze);
@@ -37,6 +38,7 @@ ze = {};
   }
 
   Rect.prototype.draw = function(ctx) {
+    //console.log('rect draw');
     ctx.fillStyle = '#FF0000';
     ctx.fillRect(this.pos.x, this.pos.y, this.width, this.height);
   }
@@ -54,18 +56,20 @@ ze = {};
     this.ctx = this.canvas.getContext('2d');
     this.objs = [];
     this.userLoop = null;
-    this.draw();
   }
 
-  App.prototype.addObj = function () {
-
+  App.prototype.addObj = function (obj) {
+    this.objs.push(obj);
+    //console.log('add', this.objs);
   }
 
   App.prototype.draw = function() {
     if (this.userLoop) {
-      requestAnimFrame(draw);
+      window.animId = requestAnimationFrame(App.prototype.draw.bind(this));
       this.userLoop();
+      //console.log('enter loop');
     }
+    //console.log('draw');
 
     this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height)
     for (var i = 0; i < this.objs.length; i++) {
