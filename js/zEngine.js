@@ -40,6 +40,7 @@ ze = {};
   Rect.prototype.draw = function(ctx) {
     //console.log('rect draw');
     ctx.fillStyle = '#FF0000';
+    //console.log(this.pos.x, this.pos.y, this.width, this.height);
     ctx.fillRect(this.pos.x, this.pos.y, this.width, this.height);
   }
 })();
