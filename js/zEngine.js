@@ -24,22 +24,46 @@ ze = {};
   }
 })();
 
+// Shape
+(function () {
+  function Shape() { this.Shape.apply(this, arguments); }; ze.Shape = Shape;
+
+  Shape.prototype.Shape = function () {
+    this.style = {
+      stroke: '',
+      fill: ''
+    }
+  }
+
+  Shape.prototype.draw = function () {}
+
+  Shape.prototype.setStrokeStyle = function (style) {
+    this.style.stroke = style;
+    return this;
+  }
+
+  Shape.prototype.setFillStyle = function (style) {
+    this.style.fill = style;
+    return this;
+  }
+})();
+
 // Line
 (function () {
-  function Line() { this.Line.apply(this,arguments) }; ze.Line = Line;
+  function Line() { this.Line.apply(this,arguments) }; 
+  ze.Line = Line;
+  Line.prototype = new ze.Shape();
 
   Line.prototype.Line = function (x1, y1, x2, y2) {
-    this.x1 = x1 || 0;
-    this.y1 = y1 || 0;
-    this.x2 = x2 || 0;
-    this.y2 = y2 || 0;
+    this.pos1 = new ze.Vec(x1, y1);
+    this.pos2 = new ze.Vec(x2, y2);
   }
 
   Line.prototype.draw = function (ctx) {
-    ctx.strokeStyle = '#CCCCCC';
+    ctx.strokeStyle = this.style.stroke;
     ctx.beginPath();
-    ctx.moveTo(this.x1, this.y1);
-    ctx.lineTo(this.x2, this.y2);
+    ctx.moveTo(this.pos1.x, this.pos1.y);
+    ctx.lineTo(this.pos2.x, this.pos2.y);
     ctx.stroke();
   }
 })();
@@ -50,6 +74,7 @@ ze = {};
     this.Rect.apply(this, arguments);
   }
   ze.Rect = Rect;
+  Rect.prototype = new ze.Shape;
 
   Rect.prototype.Rect = function (x, y, w, h) {
     this.pos = new ze.Vec(x,y);
@@ -59,7 +84,7 @@ ze = {};
 
   Rect.prototype.draw = function(ctx) {
     //console.log('rect draw');
-    ctx.fillStyle = '#FF0000';
+    ctx.fillStyle = this.style.fill;
     //console.log(this.pos.x, this.pos.y, this.width, this.height);
     ctx.fillRect(this.pos.x, this.pos.y, this.width, this.height);
   }
