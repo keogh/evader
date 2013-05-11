@@ -24,6 +24,26 @@ ze = {};
   }
 })();
 
+// Line
+(function () {
+  function Line() { this.Line.apply(this,arguments) }; ze.Line = Line;
+
+  Line.prototype.Line = function (x1, y1, x2, y2) {
+    this.x1 = x1 || 0;
+    this.y1 = y1 || 0;
+    this.x2 = x2 || 0;
+    this.y2 = y2 || 0;
+  }
+
+  Line.prototype.draw = function (ctx) {
+    ctx.strokeStyle = '#CCCCCC';
+    ctx.beginPath();
+    ctx.moveTo(this.x1, this.y1);
+    ctx.lineTo(this.x2, this.y2);
+    ctx.stroke();
+  }
+})();
+
 // Rect
 (function () {
   function Rect(x, y, w, h) {
