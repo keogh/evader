@@ -9,6 +9,10 @@ ze = {};
     app.draw();
   }
 
+  ze.getRandom = function (min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
 })(ze);
 
 // Vector
