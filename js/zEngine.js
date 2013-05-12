@@ -131,4 +131,8 @@ ze = {};
     this.userLoop = func;
     this.draw();
   }
+
+  App.prototype.stop = function () {
+    this.userLoop = null;
+  }
 })();
