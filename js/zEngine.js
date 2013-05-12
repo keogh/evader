@@ -78,7 +78,7 @@ ze = {};
     this.Rect.apply(this, arguments);
   }
   ze.Rect = Rect;
-  Rect.prototype = new ze.Shape;
+  Rect.prototype = new ze.Shape();
 
   Rect.prototype.Rect = function (x, y, w, h) {
     this.pos = new ze.Vec(x,y);
@@ -92,6 +92,10 @@ ze = {};
     //console.log(this.pos.x, this.pos.y, this.width, this.height);
     ctx.fillRect(this.pos.x, this.pos.y, this.width, this.height);
   }
+
+  /*Rect.prototype.setFillStyle = function (style) {
+    ze.Shape.prototype.setFillStyle.call(this, style);
+  }*/
 })();
 
 
@@ -111,6 +115,14 @@ ze = {};
   App.prototype.addObj = function (obj) {
     this.objs.push(obj);
     //console.log('add', this.objs);
+  }
+
+  App.prototype.removeObj = function (obj) {
+    var i = this.objs.indexOf(obj);
+    if (i > -1) {
+      //console.log('rmv');
+      this.objs.splice(i,1);
+    }
   }
 
   App.prototype.draw = function() {
