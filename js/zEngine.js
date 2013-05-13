@@ -110,6 +110,13 @@ ze = {};
     this.ctx = this.canvas.getContext('2d');
     this.objs = [];
     this.userLoop = null;
+    this.then = new Date().getTime();
+    this.now = this.then;
+    this.calculateDelta();
+  }
+
+  App.prototype.calculateDelta = function () {
+    this.delta = (this.now - this.then) / 1000;
   }
 
   App.prototype.addObj = function (obj) {
@@ -128,8 +135,11 @@ ze = {};
   App.prototype.draw = function() {
     if (this.userLoop) {
       window.animId = requestAnimationFrame(App.prototype.draw.bind(this));
+      this.now = new Date().getTime();
+      this.calculateDelta();
       this.userLoop();
       //console.log('enter loop');
+      this.then = this.now;
     }
     //console.log('draw');
 
