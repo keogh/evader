@@ -76,24 +76,28 @@ var Evader = function (game) {
 	}*/
 	var current_obstacle = 0,
 		visible_obstacles = [];
-		//now, delta,
+	
+	//var now, delta,
 		//then = new Date().getTime();
 	var updateObstacles = function () {
 		//now = new Date().getTime();
-		//delta = now - then;
+		//delta = (now - then) / 1000;
 		if (current_obstacle == 0 || obstacles[current_obstacle-1].pos.y > 200) {
 			visible_obstacles.push(obstacles[current_obstacle]);
 			game.addObj(obstacles[current_obstacle]);
 			current_obstacle++;
 		}
 
-		for (var i = 0; i < visible_obstacles.length; i++) {
-			visible_obstacles[i].pos.y += 3;
-			//visible_obstacles[i].pos.y += calcSpeed(delta, 5);
+		var distance = 100 * game.delta;
+		for (var i = 0; i < visible_obstacles.length; i++) {		
+			visible_obstacles[i].pos.y += distance;
+			//visible_obstacles[i].pos.y += 3;
 			if (visible_obstacles[i].pos.y > game.canvas.height) {
 				game.removeObj(visible_obstacles[i]);
 			}
 		}
+
+		//then = now;
 	}
 
 	game.setLoop(function () {
