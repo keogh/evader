@@ -63,25 +63,12 @@ var Evader = function (game) {
 				obstacles.push(new ze.Rect(initial_x, -50, end_width, 20).setFillStyle('#FFCCCC'));
 			j++;
 		}
-		/*for (var j = 0; j < ran.length; j++) {
-			if (ran[j] == 1)
-				obstacles.push(new ze.Rect(player_positions[j].x, -20, 100, 20).setFillStyle('#FFCCCC'));
-		}*/
 	}
-	//console.log(obstacles);
 
-	//game.addObj(new ze.Rect(10,10,100,20).setFillStyle('#AACCBB'));
-	/*function calcSpeed(del, speed) {
-		return (speed * 60 * del) / 1000;
-	}*/
 	var current_obstacle = 0,
 		visible_obstacles = [];
 	
-	//var now, delta,
-		//then = new Date().getTime();
 	var updateObstacles = function () {
-		//now = new Date().getTime();
-		//delta = (now - then) / 1000;
 		if (current_obstacle == 0 || obstacles[current_obstacle-1].pos.y > 200) {
 			visible_obstacles.push(obstacles[current_obstacle]);
 			game.addObj(obstacles[current_obstacle]);
@@ -91,13 +78,13 @@ var Evader = function (game) {
 		var distance = 100 * game.delta;
 		for (var i = 0; i < visible_obstacles.length; i++) {		
 			visible_obstacles[i].pos.y += distance;
-			//visible_obstacles[i].pos.y += 3;
 			if (visible_obstacles[i].pos.y > game.canvas.height) {
 				game.removeObj(visible_obstacles[i]);
+				visible_obstacles.splice(i, 1);
+				i--;
 			}
 		}
 
-		//then = now;
 	}
 
 	var fps_div = document.getElementById('fps');
