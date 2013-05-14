@@ -9,6 +9,7 @@ var Evader = function (game) {
 			new ze.Vec(x_positions[2], game.canvas.height - 105),
 		],
 		player_position = 1;
+	//window.pos = player_position;
 	player = new ze.Rect(player_positions[player_position].x, player_positions[player_position].y, 100, 100)
 		.setFillStyle('#FF0000');
 	game.addObj(player);
@@ -25,12 +26,21 @@ var Evader = function (game) {
 	window.addEventListener('keydown', function (e) {
 		// 39 Right arrow, 37 left arrow
 		//console.log(e.keyCode);
-		if (e.keyCode == 39 && player_position < 2) {
-			player_position++;
-		} else if (e.keyCode == 37 && player_position > 0) {
-			player_position--;
+		if (input == 0) {
+			if (e.keyCode == 39 && player_position < 2) {
+				input = 1;
+			} else if (e.keyCode == 37 && player_position > 0) {
+				input = -1;
+			}
 		}
 	});
+
+	window.addEventListener('keyup', function (e) {
+		if (e.keyCode == 39 || e.keyCode == 37) {
+			console.log('no');
+			input = 0;
+		}
+	})
 
 	// Map
 	var map = [
@@ -84,13 +94,25 @@ var Evader = function (game) {
 				i--;
 			}
 		}
+	}
 
+	var updatePlayer = function () {
+		if (input > 0 && player_position < 2) {
+			player_position++;
+			input = 0;
+		} else if (input < 0 && player_position > 0) {
+			player_position--;
+			input = 0;
+		}
+
+		player.pos = new ze.Vec(player_positions[player_position].x, player_positions[player_position].y);
 	}
 
 	var fps_div = document.getElementById('fps');
 	var cont = 1;
 	game.setLoop(function () {
-		player.pos = new ze.Vec(player_positions[player_position].x, player_positions[player_position].y);
+		//player.pos = new ze.Vec(player_positions[player_position].x, player_positions[player_position].y);
+		updatePlayer();
 		updateObstacles();
 
 		fps_div.innerHTML = 'FPS: ' + game.fps;
