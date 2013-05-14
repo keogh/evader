@@ -100,9 +100,13 @@ var Evader = function (game) {
 		//then = now;
 	}
 
+	var fps_div = document.getElementById('fps');
+	var cont = 1;
 	game.setLoop(function () {
 		player.pos = new ze.Vec(player_positions[player_position].x, player_positions[player_position].y);
 		updateObstacles();
+
+		fps_div.innerHTML = 'FPS: ' + game.fps;
 	});
 }
 

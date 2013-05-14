@@ -113,6 +113,8 @@ ze = {};
     this.then = new Date().getTime();
     this.now = this.then;
     this.calculateDelta();
+    this.fps = 0;
+    this.last_fps_shown = this.now;
   }
 
   App.prototype.calculateDelta = function () {
@@ -138,10 +140,13 @@ ze = {};
       this.now = new Date().getTime();
       this.calculateDelta();
       this.userLoop();
-      //console.log('enter loop');
       this.then = this.now;
+
+      if (this.delta > 0.001 && (this.now - this.last_fps_shown) > 200) {
+        this.fps = Math.round((1 / this.delta) * 100) / 100;
+        this.last_fps_shown = this.now;
+      }
     }
-    //console.log('draw');
 
     this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height)
     for (var i = 0; i < this.objs.length; i++) {
