@@ -22,7 +22,9 @@ var Evader = function (game) {
 	game.addObj(new ze.Line(second_x+100, 0, second_x+100, game.canvas.height).setStrokeStyle('#CCCCCC'));
 
 	//Events
-	var input = 0;
+	var input = 0,
+		turbo = false;
+		turbo_factor = 4;
 	window.addEventListener('keydown', function (e) {
 		// 39 Right arrow, 37 left arrow
 		//console.log(e.keyCode);
@@ -33,13 +35,20 @@ var Evader = function (game) {
 				input = -1;
 			}
 		}
+
+		// Turbo, t key
+		if (e.keyCode == 84 && turbo === false) {
+			turbo = true;
+		}
 	});
 
 	window.addEventListener('keyup', function (e) {
 		if (e.keyCode == 39 || e.keyCode == 37) {
-			console.log('no');
+			//console.log('no');
 			input = 0;
 		}
+
+		if (e.keyCode == 84) turbo = false;
 	})
 
 	// Map
@@ -53,7 +62,7 @@ var Evader = function (game) {
 	];
 
 	var obstacles = [];
-	for (var i = 0; i <= 100; i++) {
+	for (var i = 0; i <= 299; i++) {
 		var ran = map[ze.getRandom(0, map.length - 1)],
 			initial_x = 0,
 			end_width = 100,
@@ -76,8 +85,9 @@ var Evader = function (game) {
 	}
 
 	var current_obstacle = 0,
-		visible_obstacles = [];
-	
+		visible_obstacles = [],
+		initial_obstacle_speed = 200;
+		obstacle_speed = initial_obstacle_speed;
 	var updateObstacles = function () {
 		if (current_obstacle == 0 || obstacles[current_obstacle-1].pos.y > 200) {
 			visible_obstacles.push(obstacles[current_obstacle]);
@@ -85,7 +95,7 @@ var Evader = function (game) {
 			current_obstacle++;
 		}
 
-		var distance = 100 * game.delta;
+		var distance = obstacle_speed * game.delta;
 		for (var i = 0; i < visible_obstacles.length; i++) {		
 			visible_obstacles[i].pos.y += distance;
 			if (visible_obstacles[i].pos.y > game.canvas.height) {
@@ -108,12 +118,30 @@ var Evader = function (game) {
 		player.pos = new ze.Vec(player_positions[player_position].x, player_positions[player_position].y);
 	}
 
+	var playerCollides = function () {
+
+	}
+
+	var updateTurbo = function () {
+		if (turbo && obstacle_speed == initial_obstacle_speed) {
+			obstacle_speed *= turbo_factor;
+		} else if (obstacle_speed != initial_obstacle_speed) {
+			obstacle_speed = initial_obstacle_speed;
+		}
+	}
+
 	var fps_div = document.getElementById('fps');
 	var cont = 1;
 	game.setLoop(function () {
 		//player.pos = new ze.Vec(player_positions[player_position].x, player_positions[player_position].y);
+		
+		updateTurbo();
 		updatePlayer();
 		updateObstacles();
+
+		if (playerCollides()) {
+			game.stop();
+		}
 
 		fps_div.innerHTML = 'FPS: ' + game.fps;
 	});
