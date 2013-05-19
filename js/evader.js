@@ -119,7 +119,15 @@ var Evader = function (game) {
 	}
 
 	var playerCollides = function () {
-
+		for (var i = 0; i < visible_obstacles.length; i++) {
+			var ob = visible_obstacles[i];
+			if (player.pos.x >= (ob.pos.x + ob.width) || (player.pos.x + player.width) <= ob.pos.x) continue;
+			if (player.pos.y >= (ob.pos.y + ob.height) || (player.pos.y + player.height) <= ob.pos.y) continue;
+			console.log('player', player);
+			console.log('ob', ob);
+			return true;
+		}
+		return false;
 	}
 
 	var updateTurbo = function () {
